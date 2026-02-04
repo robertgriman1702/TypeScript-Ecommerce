@@ -3,7 +3,7 @@ import { navbarlinks } from "../../constants/links";
 
 export const Navbar = () => {
   return (
-    <div className="border-b border-slate-200 py-3 px-5 lg:px-12">
+    <div className="bg-slate-600 border-b border-slate-600 py-3 px-5 lg:px-12">
       <nav className="flex justify-between items-center gap-4 w-full">
         <div className="flex justify-between w-[70%]">
           {navbarlinks.map((link) => (
