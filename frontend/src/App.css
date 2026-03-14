@@ -51,9 +51,9 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* Gris similar al de la captura */
+  background: #cbd5e1; 
   border-radius: 10px;
-  border: 2px solid #f1f1f1; /* Crea un efecto de margen */
+  border: 2px solid #f1f1f1;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
