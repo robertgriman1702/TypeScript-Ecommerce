@@ -4,7 +4,7 @@ import { FiPackage, FiClock, FiCheckCircle, FiTruck } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { formatPrice } from '../components/helpers/index';
 
-const API = 'http://localhost:3000/api';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 const statusConfig: Record<string, { label: string; icon: any; color: string }> = {
   pending:   { label: 'Pendiente',   icon: FiClock,        color: 'text-yellow-500 bg-yellow-50'  },
