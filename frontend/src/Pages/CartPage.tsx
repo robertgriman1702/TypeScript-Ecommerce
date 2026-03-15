@@ -42,14 +42,9 @@ export const CartPage = () => {
   };
 
   const handleClearCart = async () => {
-    if (isGuest) {
-      localStorage.removeItem('guest_cart');
-      window.location.reload();
-    } else {
-      setClearing(true);
-      await clearCart();
-      setClearing(false);
-    }
+    setClearing(true);
+    await clearCart();
+    setClearing(false);
   };
 
   return (
