@@ -37,15 +37,14 @@ export const Header = () => {
           <div className="w-[35%] md:w-[30%]">
             <Logo />
           </div>
-          
-          {/* Navigation & Search Section */}
+
+          {/* Search + Actions */}
           <div className="w-[65%] md:w-[70%] pl-2 md:pl-6 lg:pl-8 flex justify-between">
-            <div className="flex flex-col gap-2 md:gap-4 flex-1">
+            <div className="flex flex-col gap-2 md:gap-5 flex-1">
               <span className="text-slate-300 hidden md:flex flex-row text-sm">
-                <span className="font-semibold text-white mr-1">Lo más buscado:</span> 
+                <span className="font-semibold text-white mr-1">Lo más buscado:</span>
                 Papeles, Carpetas, Limpia Tipo...
               </span>
-              
               <div className="flex w-full max-w-2xl">
                 <ContainerFilter onSearch={(searchTerm, category) => {
                   navigate(`/products?search=${encodeURIComponent(searchTerm)}&category=${encodeURIComponent(category)}`);
@@ -53,7 +52,8 @@ export const Header = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 md:gap-4 ml-2 md:ml-0">
+            <div className="flex flex-col gap-2 md:gap-5 ml-2 md:ml-0">
+              {/* User button */}
               <div className="relative flex justify-end">
                 {user ? (
                   <div className="relative">
@@ -92,7 +92,7 @@ export const Header = () => {
                     <FiUser className="w-4 h-4" />
                   </button>
                 )}
-              </div>    
+              </div>
 
               <div className="flex flex-row-reverse items-center gap-2 md:gap-4">
                 <div className="flex items-center gap-2">
@@ -122,6 +122,7 @@ export const Header = () => {
         </div>
       </header>
 
+      {/* Modal de autenticación */}
       <AuthModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
