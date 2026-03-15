@@ -19,7 +19,7 @@ export const Navbar = () => {
     <div className="bg-slate-700 border-b border-slate-800 py-2 md:py-3 px-4 md:px-5 lg:px-20">
       <nav className="flex justify-between items-center gap-2 md:gap-4 w-full">
         
-        <div className="flex gap-3 md:gap-12 items-center">
+        <div className="flex gap-6 md:gap-12 items-center">
           
           {/* overflow:visible para que el dropdown no quede clipeado */}
           <div className="relative z-50">
