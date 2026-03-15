@@ -14,9 +14,9 @@ export const CartPage = () => {
   const { user }  = useAuth();
   const navigate  = useNavigate();
 
-  const [authModalOpen,  setAuthModalOpen]  = useState(false);
-  const [confirmOpen,    setConfirmOpen]    = useState(false);
-  const [clearing,       setClearing]       = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [confirmOpen,   setConfirmOpen]   = useState(false);
+  const [clearing,      setClearing]      = useState(false);
 
   const displayItems = isGuest
     ? guestItems.map(g => ({ ...g, id: g.product_id }))
@@ -26,10 +26,10 @@ export const CartPage = () => {
 
   if (!displayItems.length) {
     return (
-      <div className="text-center py-20 space-y-4">
-        <FiShoppingBag size={60} className="mx-auto text-gray-300" />
-        <p className="text-xl text-gray-500">Tu carrito está vacío</p>
-        <Link to="/products" className="inline-block bg-slate-800 text-white px-6 py-3 rounded-lg hover:bg-amber-400 transition-colors">
+      <div className="text-center py-16 space-y-4 px-4">
+        <FiShoppingBag size={50} className="mx-auto text-gray-300" />
+        <p className="text-lg text-gray-500">Tu carrito está vacío</p>
+        <Link to="/products" className="inline-block bg-slate-800 text-white px-6 py-3 rounded-lg hover:bg-amber-400 transition-colors text-sm">
           Ver Productos
         </Link>
       </div>
@@ -37,8 +37,8 @@ export const CartPage = () => {
   }
 
   const handleCheckout = () => {
-    if (!user) { setAuthModalOpen(true); }
-    else       { navigate('/checkout'); }
+    if (!user) setAuthModalOpen(true);
+    else navigate('/checkout');
   };
 
   const handleClearCart = async () => {
@@ -49,135 +49,111 @@ export const CartPage = () => {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto py-10 px-4">
+      <div className="max-w-5xl mx-auto py-6 md:py-10 px-3 md:px-4">
 
-        {/* Título + botón vaciar */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-slate-800">
-            Tu Carrito <span className="text-lg font-normal text-gray-400">({totalItems} items)</span>
+        {/* Título */}
+        <div className="flex items-center justify-between mb-5 md:mb-8">
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800">
+            Carrito <span className="text-sm md:text-lg font-normal text-gray-400">({totalItems})</span>
           </h1>
-          <button
-            onClick={() => setConfirmOpen(true)}
-            disabled={clearing}
-            className="flex items-center gap-2 text-sm text-red-400 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"
-          >
-            <FiTrash2 className="w-4 h-4" />
-            {clearing ? 'Vaciando...' : 'Vaciar carrito'}
+          <button onClick={() => setConfirmOpen(true)} disabled={clearing}
+            className="flex items-center gap-1 text-xs md:text-sm text-red-400 hover:text-red-600 hover:bg-red-50 px-2 md:px-3 py-2 rounded-lg transition-colors">
+            <FiTrash2 className="w-3 h-3 md:w-4 md:h-4" />
+            {clearing ? 'Vaciando...' : 'Vaciar'}
           </button>
         </div>
 
         {isGuest && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 mb-6">
-            🛒 Tu carrito se guardará cuando inicies sesión. ¡No pierdas tus productos!
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5 text-xs text-amber-800 mb-4">
+            🛒 Inicia sesión para guardar tu carrito permanentemente.
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 md:gap-8">
           {/* Lista */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-3">
             {displayItems.map(item => (
-              <div key={item.product_id} className="flex gap-4 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <img
-                  src={item.productos.image}
-                  alt={item.productos.name}
-                  className="w-24 h-24 object-contain rounded-lg bg-gray-50 p-2"
-                />
-                <div className="flex-1 space-y-2">
-                  <p className="font-semibold text-slate-800 text-sm line-clamp-2">{item.productos.name}</p>
-                  <p className="text-amber-500 font-bold">{formatPrice(item.productos.price)}</p>
+              <div key={item.product_id} className="flex gap-3 bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                <img src={item.productos.image} alt={item.productos.name}
+                  className="w-16 h-16 md:w-24 md:h-24 object-contain rounded-lg bg-gray-50 p-1 flex-shrink-0" />
+                
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-slate-800 text-xs md:text-sm line-clamp-2">{item.productos.name}</p>
+                  <p className="text-amber-500 font-bold text-sm md:text-base mt-0.5">{formatPrice(item.productos.price)}</p>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
                       <button
                         onClick={() => isGuest
                           ? updateGuestQty(item.product_id, item.quantity - 1)
                           : (item.quantity > 1 ? updateQuantity(item.id, item.quantity - 1) : removeFromCart(item.id))
                         }
-                        className="px-3 py-1.5 hover:bg-gray-100 transition-colors"
-                      >
+                        className="px-2 py-1 hover:bg-gray-100 transition-colors">
                         <FiMinus className="w-3 h-3" />
                       </button>
-                      <span className="px-3 py-1.5 text-sm font-semibold min-w-[2rem] text-center">
-                        {item.quantity}
-                      </span>
+                      <span className="px-2 py-1 text-xs font-semibold min-w-[1.5rem] text-center">{item.quantity}</span>
                       <button
                         onClick={() => isGuest
                           ? updateGuestQty(item.product_id, item.quantity + 1)
                           : updateQuantity(item.id, item.quantity + 1)
                         }
                         disabled={item.quantity >= item.productos.stock}
-                        className="px-3 py-1.5 hover:bg-gray-100 disabled:opacity-40 transition-colors"
-                      >
+                        className="px-2 py-1 hover:bg-gray-100 disabled:opacity-40 transition-colors">
                         <FiPlus className="w-3 h-3" />
                       </button>
                     </div>
 
-                    <button
-                      onClick={() => isGuest ? removeGuestItem(item.product_id) : removeFromCart(item.id)}
-                      className="text-red-400 hover:text-red-600 transition-colors ml-auto"
-                    >
-                      <FiTrash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-slate-800 text-sm">{formatPrice(item.productos.price * item.quantity)}</p>
+                      <button onClick={() => isGuest ? removeGuestItem(item.product_id) : removeFromCart(item.id)}
+                        className="text-red-400 hover:text-red-600 transition-colors">
+                        <FiTrash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-
-                <div className="text-right">
-                  <p className="font-bold text-slate-800">
-                    {formatPrice(item.productos.price * item.quantity)}
-                  </p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Resumen */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 h-fit space-y-4 sticky top-4">
-            <h2 className="text-lg font-bold text-slate-800">Resumen del pedido</h2>
+          {/* Resumen — sticky en desktop, normal en mobile */}
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm border border-gray-100 lg:h-fit lg:sticky lg:top-4 space-y-3">
+            <h2 className="text-base md:text-lg font-bold text-slate-800">Resumen</h2>
 
-            <div className="space-y-2 text-sm">
+            <div className="space-y-1.5 text-xs md:text-sm">
               {displayItems.map(item => (
                 <div key={item.product_id} className="flex justify-between text-gray-600">
-                  <span className="truncate max-w-[160px]">{item.productos.name} x{item.quantity}</span>
-                  <span>{formatPrice(item.productos.price * item.quantity)}</span>
+                  <span className="truncate max-w-[140px]">{item.productos.name} x{item.quantity}</span>
+                  <span className="flex-shrink-0 ml-2">{formatPrice(item.productos.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
 
-            <div className="border-t pt-4 flex justify-between font-bold text-lg">
+            <div className="border-t pt-3 flex justify-between font-bold text-base md:text-lg">
               <span>Total</span>
               <span className="text-amber-500">{formatPrice(totalPrice)}</span>
             </div>
 
-            <button
-              onClick={handleCheckout}
-              className="w-full bg-slate-800 hover:bg-amber-400 text-white font-semibold py-3 rounded-lg transition-colors duration-300"
-            >
+            <button onClick={handleCheckout}
+              className="w-full bg-slate-800 hover:bg-amber-400 text-white font-semibold py-3 rounded-lg transition-colors duration-300 text-sm">
               {isGuest ? 'Iniciar Sesión para Comprar' : 'Proceder al Checkout'}
             </button>
 
-            <Link to="/products" className="block text-center text-sm text-gray-500 hover:text-amber-500 transition-colors">
+            <Link to="/products" className="block text-center text-xs text-gray-500 hover:text-amber-500 transition-colors">
               ← Seguir comprando
             </Link>
           </div>
         </div>
       </div>
 
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        defaultTab="login"
-        onSuccess={() => { setAuthModalOpen(false); navigate('/checkout'); }}
-      />
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} defaultTab="login"
+        onSuccess={() => { setAuthModalOpen(false); navigate('/checkout'); }} />
 
-      <ConfirmModal
-        isOpen={confirmOpen}
-        title="Vaciar carrito"
-        message="¿Estás seguro? Se eliminarán todos los productos del carrito."
-        confirmText="Sí, vaciar"
-        cancelText="Cancelar"
+      <ConfirmModal isOpen={confirmOpen} title="Vaciar carrito"
+        message="¿Estás seguro? Se eliminarán todos los productos."
+        confirmText="Sí, vaciar" cancelText="Cancelar"
         onConfirm={() => { setConfirmOpen(false); handleClearCart(); }}
-        onCancel={() => setConfirmOpen(false)}
-      />
+        onCancel={() => setConfirmOpen(false)} />
     </>
   );
 };
