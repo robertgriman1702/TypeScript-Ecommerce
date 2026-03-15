@@ -6,7 +6,6 @@ export const Navbar = () => {
   const currentCategory = searchParams.get('category') || '';
   const currentSearch = searchParams.get('search') || '';
 
-  // Clase activa solo si los params coinciden exactamente
   const linkClass = (active: boolean) =>
     `${
       active
@@ -17,8 +16,8 @@ export const Navbar = () => {
   const isCombosActive = currentCategory === 'combos' && currentSearch === '';
 
   return (
-    <div className="bg-slate-700 border-b border-slate-800 py-2 md:py-3 px-4 md:px-5 lg:px-20 overflow-x-auto">
-      <nav className="flex justify-start items-center gap-2 md:gap-4 min-w-max md:min-w-0 w-full">
+    <div className="bg-slate-700 border-b border-slate-800 py-2 md:py-3 px-4 md:px-5 lg:px-20">
+      <nav className="flex justify-between items-center gap-2 md:gap-4 w-full">
         
         <div className="flex gap-3 md:gap-12 items-center">
           
@@ -58,7 +57,7 @@ export const Navbar = () => {
 
         </div>
 
-        <div className="hidden md:flex w-[30%] justify-end">
+        <div className="hidden md:flex justify-end">
           <p className="text-xs text-slate-300 flex items-center gap-2">
             Web Actualizada: <strong className="text-white">23/2/2026</strong>
           </p>

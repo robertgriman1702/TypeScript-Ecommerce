@@ -12,7 +12,7 @@ export const RootLayout = () => {
   const isHome = pathname === '/';
 
   return (
-    <div className="flex flex-col min-h-screen font-montserrat">
+    <div className="flex flex-col min-h-screen font-montserrat overflow-x-hidden w-full">
       <Header />
       <Navbar />
 

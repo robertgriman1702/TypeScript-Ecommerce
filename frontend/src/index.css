@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,673&family=Special+Gothic+Expanded+One&display=swap');
 @import "tailwindcss";
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }

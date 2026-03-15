@@ -45,7 +45,7 @@ export const Header = () => {
                 <span className="font-semibold text-white mr-1">Lo más buscado:</span>
                 Papeles, Carpetas, Limpia Tipo...
               </span>
-              <div className="flex w-full max-w-lg">
+              <div className="flex w-full max-w-2xl">
                 <ContainerFilter onSearch={(searchTerm, category) => {
                   navigate(`/products?search=${encodeURIComponent(searchTerm)}&category=${encodeURIComponent(category)}`);
                 }} />
