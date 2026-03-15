@@ -4,13 +4,12 @@ import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-// Todas las rutas del carrito requieren autenticación
 router.use(authMiddleware);
 
 router.get('/',           getCart);
 router.post('/',          addToCart);
+router.post('/clear',     clearCart);    
 router.put('/:itemId',    updateCartItem);
-router.delete('/clear',   clearCart);
 router.delete('/:itemId', removeFromCart);
 
 export default router;
