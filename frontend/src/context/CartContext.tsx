@@ -63,13 +63,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading,  setIsLoading]  = useState(false);
 
   const isGuest = !user;
-  const authHeaders = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+  // ← Función que genera headers frescos cada vez usando el token actual
+  const getHeaders = () => ({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
 
   const refreshCart = async () => {
     if (!token) { setItems([]); return; }
     setIsLoading(true);
     try {
-      const res  = await fetch(`${API}/cart`, { headers: authHeaders });
+      const res  = await fetch(`${API}/cart`, { headers: getHeaders() });
       const data = await res.json();
       setItems(Array.isArray(data) ? data : []);
     } catch { setItems([]); }
@@ -83,7 +88,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       guest.map(item =>
         fetch(`${API}/cart`, {
           method:  'POST',
-          headers: authHeaders,
+          headers: getHeaders(),
           body:    JSON.stringify({ product_id: item.product_id, quantity: item.quantity }),
         })
       )
@@ -120,7 +125,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } else {
       await fetch(`${API}/cart`, {
         method:  'POST',
-        headers: authHeaders,
+        headers: getHeaders(),
         body:    JSON.stringify({ product_id: product.id, quantity: qty }),
       });
       await refreshCart();
@@ -130,14 +135,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const updateQuantity = async (itemId: number, qty: number) => {
     await fetch(`${API}/cart/${itemId}`, {
       method:  'PUT',
-      headers: authHeaders,
+      headers: getHeaders(),
       body:    JSON.stringify({ quantity: qty }),
     });
     await refreshCart();
   };
 
   const removeFromCart = async (itemId: number) => {
-    await fetch(`${API}/cart/${itemId}`, { method: 'DELETE', headers: authHeaders });
+    await fetch(`${API}/cart/${itemId}`, { method: 'DELETE', headers: getHeaders() });
     await refreshCart();
   };
 
@@ -155,9 +160,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setGuestItems(updated);
   };
 
-  // ← CAMBIO: method POST en lugar de DELETE
   const clearCart = async () => {
-    await fetch(`${API}/cart/clear`, { method: 'POST', headers: authHeaders });
+    await fetch(`${API}/cart/clear`, { method: 'POST', headers: getHeaders() });
     setItems([]);
   };
 
