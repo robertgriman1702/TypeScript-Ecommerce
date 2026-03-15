@@ -164,8 +164,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const clearCart = async () => {
-    await fetch(`${API}/cart/clear`, { method: 'POST', headers: getHeaders() });
-    setItems([]);
+    if (isGuest) {
+      localStorage.removeItem(GUEST_CART_KEY);
+      setGuestItems([]);
+    } else {
+      await fetch(`${API}/cart/clear`, { method: 'POST', headers: getHeaders() });
+      setItems([]);
+    }
   };
 
   const activeItems = isGuest ? guestItems : items;

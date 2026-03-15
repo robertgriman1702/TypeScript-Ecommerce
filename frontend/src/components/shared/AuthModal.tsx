@@ -6,7 +6,7 @@ interface Props {
   isOpen:      boolean;
   onClose:     () => void;
   defaultTab?: 'login' | 'register';
-  onSuccess?:  () => void; // callback al loguearse exitosamente
+  onSuccess?:  () => void;
 }
 
 export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: Props) => {
@@ -40,7 +40,6 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
     setError(''); setLoading(true);
     try {
       await login(email, password);
-      // CartContext detecta el login y fusiona el guest cart automáticamente
       onSuccess ? onSuccess() : onClose();
     } catch (err: any) {
       setError(err.message);
@@ -57,7 +56,9 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
     setLoading(true);
     try {
       const msg = await register(email, password);
-      setSuccess(msg);
+      // Solo mostramos mensaje de éxito, NO cerramos ni iniciamos sesión
+      setSuccess(msg || 'Revisa tu correo para confirmar tu cuenta.');
+      setEmail(''); setPassword(''); setConfirm('');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -67,7 +68,7 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center px-4"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center px-4"
       onClick={onClose}
     >
       <div
@@ -101,9 +102,16 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
         </div>
 
         {error   && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
-        {success && <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-lg mb-4">{success}</div>}
+        {success && (
+          <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-lg mb-4">
+            {success}
+            <button onClick={onClose} className="block mt-2 text-green-800 font-semibold underline text-xs">
+              Cerrar
+            </button>
+          </div>
+        )}
 
-        {tab === 'login' && (
+        {tab === 'login' && !success && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Correo</label>
@@ -124,7 +132,7 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
           </form>
         )}
 
-        {tab === 'register' && (
+        {tab === 'register' && !success && (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Correo</label>
@@ -144,7 +152,7 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
                 placeholder="Repite tu contraseña"
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
             </div>
-            <button type="submit" disabled={loading || !!success}
+            <button type="submit" disabled={loading}
               className="w-full bg-slate-800 hover:bg-amber-400 disabled:bg-gray-300 text-white font-semibold py-3 rounded-lg transition-colors duration-300">
               {loading ? 'Registrando...' : 'Crear Cuenta'}
             </button>
