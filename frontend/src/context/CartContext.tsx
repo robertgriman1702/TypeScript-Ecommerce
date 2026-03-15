@@ -64,11 +64,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const isGuest = !user;
 
-  // ← Función que genera headers frescos cada vez usando el token actual
-  const getHeaders = () => ({
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
+  // Lee el token del estado o directamente de localStorage como fallback
+  const getHeaders = () => {
+    const currentToken = token || localStorage.getItem('token');
+    return {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    };
+  };
 
   const refreshCart = async () => {
     if (!token) { setItems([]); return; }
