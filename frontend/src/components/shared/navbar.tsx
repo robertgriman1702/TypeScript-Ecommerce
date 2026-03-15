@@ -21,6 +21,7 @@ export const Navbar = () => {
         
         <div className="flex gap-3 md:gap-12 items-center">
           
+          {/* overflow:visible para que el dropdown no quede clipeado */}
           <div className="relative z-50">
             <Dropdown 
               label="PAPELERÍA" 
@@ -59,7 +60,7 @@ export const Navbar = () => {
 
         <div className="hidden md:flex justify-end">
           <p className="text-xs text-slate-300 flex items-center gap-2">
-            Web Actualizada: <strong className="text-white">23/2/2026</strong>
+            Web Actualizada: <strong className="text-white">15/3/2026</strong>
           </p>
         </div>
         
