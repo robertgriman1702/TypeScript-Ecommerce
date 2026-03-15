@@ -13,7 +13,10 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/api'}/productos`);
+        console.log("API URL:", import.meta.env.VITE_API_URL);
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/productos`);
+
         if (!response.ok) throw new Error('Error al conectar con el servidor');
         const data = await response.json();
         setProducts(data);
