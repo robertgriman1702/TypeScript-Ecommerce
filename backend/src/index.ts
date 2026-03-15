@@ -11,26 +11,8 @@ dotenv.config();
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// Acepta cualquier subdominio de vercel.app y localhost
-const allowedOrigins = [
-  /^https:\/\/.*\.vercel\.app$/,
-  'http://localhost:5173',
-  'http://localhost:3000',
-];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // permite requests sin origin (ej: Postman)
-    const allowed = allowedOrigins.some(o =>
-      typeof o === 'string' ? o === origin : o.test(origin)
-    );
-    if (allowed) callback(null, true);
-    else callback(new Error(`CORS bloqueado para: ${origin}`));
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
-
+// Permitir todos los orígenes temporalmente
+app.use(cors());
 app.use(express.json());
 
 // ─── Rutas ────────────────────────────────────────────────────────────────────
