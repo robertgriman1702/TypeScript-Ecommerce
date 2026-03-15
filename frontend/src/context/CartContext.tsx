@@ -18,7 +18,6 @@ export interface CartItem {
   };
 }
 
-// Item simplificado para el carrito guest (sin datos del producto completos)
 interface GuestItem {
   product_id: number;
   quantity:   number;
@@ -49,7 +48,6 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | null>(null);
 
-// ─── Helpers localStorage ────────────────────────────────────────────────────
 const getGuestCart = (): GuestItem[] => {
   try { return JSON.parse(localStorage.getItem(GUEST_CART_KEY) || '[]'); }
   catch { return []; }
@@ -67,7 +65,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const isGuest = !user;
   const authHeaders = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
 
-  // ─── Carrito DB ─────────────────────────────────────────────────────────────
   const refreshCart = async () => {
     if (!token) { setItems([]); return; }
     setIsLoading(true);
@@ -79,12 +76,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     finally  { setIsLoading(false); }
   };
 
-  // ─── Fusión: guest → DB al loguearse ────────────────────────────────────────
   const mergeGuestCart = async () => {
     const guest = getGuestCart();
     if (!guest.length) return;
-
-    // Agrega cada item del guest al carrito DB
     await Promise.all(
       guest.map(item =>
         fetch(`${API}/cart`, {
@@ -94,14 +88,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         })
       )
     );
-
-    // Limpia el guest cart
     localStorage.removeItem(GUEST_CART_KEY);
     setGuestItems([]);
     await refreshCart();
   };
 
-  // Cuando el usuario inicia sesión, fusiona
   useEffect(() => {
     if (user && token) {
       mergeGuestCart();
@@ -110,14 +101,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  // ─── Agregar al carrito ──────────────────────────────────────────────────────
   const addToCart = async (product: CartItem['productos'], qty = 1) => {
     if (isGuest) {
-      // Modo guest: guarda en localStorage
       const current = getGuestCart();
       const existing = current.find(i => i.product_id === product.id);
       let updated: GuestItem[];
-
       if (existing) {
         updated = current.map(i =>
           i.product_id === product.id
@@ -127,11 +115,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       } else {
         updated = [...current, { product_id: product.id, quantity: qty, productos: product }];
       }
-
       saveGuestCart(updated);
       setGuestItems(updated);
     } else {
-      // Modo logueado: guarda en DB
       await fetch(`${API}/cart`, {
         method:  'POST',
         headers: authHeaders,
@@ -141,7 +127,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // ─── Actualizar cantidad (DB) ────────────────────────────────────────────────
   const updateQuantity = async (itemId: number, qty: number) => {
     await fetch(`${API}/cart/${itemId}`, {
       method:  'PUT',
@@ -151,20 +136,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     await refreshCart();
   };
 
-  // ─── Eliminar item (DB) ──────────────────────────────────────────────────────
   const removeFromCart = async (itemId: number) => {
     await fetch(`${API}/cart/${itemId}`, { method: 'DELETE', headers: authHeaders });
     await refreshCart();
   };
 
-  // ─── Eliminar item guest ─────────────────────────────────────────────────────
   const removeGuestItem = (productId: number) => {
     const updated = guestItems.filter(i => i.product_id !== productId);
     saveGuestCart(updated);
     setGuestItems(updated);
   };
 
-  // ─── Actualizar cantidad guest ───────────────────────────────────────────────
   const updateGuestQty = (productId: number, qty: number) => {
     const updated = qty <= 0
       ? guestItems.filter(i => i.product_id !== productId)
@@ -173,15 +155,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setGuestItems(updated);
   };
 
+  // ← CAMBIO: method POST en lugar de DELETE
   const clearCart = async () => {
-    await fetch(`${API}/cart/clear`, { method: 'DELETE', headers: authHeaders });
+    await fetch(`${API}/cart/clear`, { method: 'POST', headers: authHeaders });
     setItems([]);
   };
 
-  // ─── Totales ─────────────────────────────────────────────────────────────────
-  const activeItems   = isGuest ? guestItems : items;
-  const totalItems    = activeItems.reduce((s, i) => s + i.quantity, 0);
-  const totalPrice    = activeItems.reduce((s, i) => s + i.productos.price * i.quantity, 0);
+  const activeItems = isGuest ? guestItems : items;
+  const totalItems  = activeItems.reduce((s, i) => s + i.quantity, 0);
+  const totalPrice  = activeItems.reduce((s, i) => s + i.productos.price * i.quantity, 0);
 
   return (
     <CartContext.Provider value={{
