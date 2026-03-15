@@ -56,7 +56,6 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
     setLoading(true);
     try {
       const msg = await register(email, password);
-      // Solo mostramos mensaje de éxito, NO cerramos ni iniciamos sesión
       setSuccess(msg || 'Revisa tu correo para confirmar tu cuenta.');
       setEmail(''); setPassword(''); setConfirm('');
     } catch (err: any) {
@@ -75,32 +74,22 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
         className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative animate-fadeIn"
         onClick={e => e.stopPropagation()}
       >
+        {/* Cerrar */}
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
           <FiX size={22} />
         </button>
 
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">Pegazo C.A.</h2>
-          <p className="text-sm text-gray-400">Papelería</p>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-slate-800">
+            {tab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            {tab === 'login' ? 'Accede a tu cuenta de Pegazo C.A.' : 'Únete a Pegazo C.A.'}
+          </p>
         </div>
 
-        <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
-          <button
-            onClick={() => setTab('login')}
-            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200
-              ${tab === 'login' ? 'bg-slate-800 text-white shadow' : 'text-gray-500 hover:text-gray-800'}`}
-          >
-            Iniciar Sesión
-          </button>
-          <button
-            onClick={() => setTab('register')}
-            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200
-              ${tab === 'register' ? 'bg-slate-800 text-white shadow' : 'text-gray-500 hover:text-gray-800'}`}
-          >
-            Registrarse
-          </button>
-        </div>
-
+        {/* Mensajes */}
         {error   && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
         {success && (
           <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-lg mb-4">
@@ -111,6 +100,7 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
           </div>
         )}
 
+        {/* ── LOGIN ── */}
         {tab === 'login' && !success && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -129,9 +119,18 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
               className="w-full bg-slate-800 hover:bg-amber-400 disabled:bg-gray-300 text-white font-semibold py-3 rounded-lg transition-colors duration-300">
               {loading ? 'Ingresando...' : 'Iniciar Sesión'}
             </button>
+
+            <p className="text-center text-sm text-gray-500 pt-2">
+              ¿No tienes cuenta?{' '}
+              <button type="button" onClick={() => setTab('register')}
+                className="text-amber-500 font-semibold hover:underline">
+                Regístrate aquí
+              </button>
+            </p>
           </form>
         )}
 
+        {/* ── REGISTRO ── */}
         {tab === 'register' && !success && (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
@@ -156,6 +155,14 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onSuccess }: 
               className="w-full bg-slate-800 hover:bg-amber-400 disabled:bg-gray-300 text-white font-semibold py-3 rounded-lg transition-colors duration-300">
               {loading ? 'Registrando...' : 'Crear Cuenta'}
             </button>
+
+            <p className="text-center text-sm text-gray-500 pt-2">
+              ¿Ya tienes cuenta?{' '}
+              <button type="button" onClick={() => setTab('login')}
+                className="text-amber-500 font-semibold hover:underline">
+                Inicia sesión
+              </button>
+            </p>
           </form>
         )}
       </div>
