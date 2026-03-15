@@ -31,40 +31,40 @@ export const Header = () => {
 
   return (
     <>
-      <header className="bg-slate-800 text-white py-8 px-5 border-b border-slate-800 lg:px-20">
-        <div className="flex items-center gap-5">
+      <header className="bg-slate-800 text-white py-4 md:py-8 px-4 md:px-5 border-b border-slate-800 lg:px-20">
+        <div className="flex items-center gap-3 md:gap-5">
           {/* Logo */}
-          <div className="w-[30%]">
+          <div className="w-[35%] md:w-[30%]">
             <Logo />
           </div>
 
           {/* Search + Actions */}
-          <div className="w-[70%] pl-6 md:pl-8 flex justify-between">
-            <div className="flex flex-col gap-5">
-              <span className="text-slate-300 flex flex-row text-sm">
+          <div className="w-[65%] md:w-[70%] pl-2 md:pl-6 lg:pl-8 flex justify-between">
+            <div className="flex flex-col gap-2 md:gap-5 flex-1 min-w-0">
+              <span className="text-slate-300 hidden md:flex flex-row text-sm">
                 <span className="font-semibold text-white mr-1">Lo más buscado:</span>
                 Papeles, Carpetas, Limpia Tipo...
               </span>
-              <div className="flex w-full max-w-2xl">
+              <div className="flex w-full max-w-lg">
                 <ContainerFilter onSearch={(searchTerm, category) => {
                   navigate(`/products?search=${encodeURIComponent(searchTerm)}&category=${encodeURIComponent(category)}`);
                 }} />
               </div>
             </div>
 
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2 md:gap-5 ml-2 md:ml-0 flex-shrink-0">
               {/* User button */}
               <div className="relative flex justify-end">
                 {user ? (
                   <div className="relative">
                     <button
                       onClick={() => setShowUserMenu(p => !p)}
-                      className="border-2 border-slate-700 w-9 h-9 rounded-full grid place-items-center text-sm font-bold hover:bg-slate-700 transition-colors uppercase"
+                      className="border-2 border-slate-700 w-8 h-8 md:w-9 md:h-9 rounded-full grid place-items-center text-xs md:text-sm font-bold hover:bg-slate-700 transition-colors uppercase"
                     >
                       {user.email[0]}
                     </button>
                     {showUserMenu && (
-                      <div className="absolute right-0 top-11 bg-white text-gray-800 rounded-xl shadow-xl border border-gray-100 w-48 z-50 overflow-hidden">
+                      <div className="absolute right-0 top-10 md:top-11 bg-white text-gray-800 rounded-xl shadow-xl border border-gray-100 w-48 z-50 overflow-hidden">
                         <div className="px-4 py-3 bg-gray-50 border-b">
                           <p className="text-xs font-semibold truncate">{user.email}</p>
                         </div>
@@ -87,27 +87,28 @@ export const Header = () => {
                 ) : (
                   <button
                     onClick={() => openModal('login')}
-                    className="border-2 border-slate-700 w-9 h-9 rounded-full grid place-items-center hover:bg-slate-700 transition-colors"
+                    className="border-2 border-slate-700 w-8 h-8 md:w-9 md:h-9 rounded-full grid place-items-center hover:bg-slate-700 transition-colors"
                   >
                     <FiUser className="w-4 h-4" />
                   </button>
                 )}
               </div>
 
-              <div className="flex flex-row-reverse items-center gap-4">
+              <div className="flex flex-row-reverse items-center gap-2 md:gap-4">
                 <div className="flex items-center gap-2">
                   <Link to="/cart" className="relative">
-                    <span className="absolute -bottom-1 -right-1 w-5 h-5 grid place-items-center bg-amber-500 text-white text-xs rounded-full font-bold z-10">
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 grid place-items-center bg-amber-500 text-white text-[10px] md:text-xs rounded-full font-bold z-10">
                       {totalItems}
                     </span>
-                    <HiOutlineShoppingCart size={40} strokeWidth={1} className="bg-amber-50 text-blue-950 hover:text-amber-400 transition-colors" />
+                    <HiOutlineShoppingCart size={30} strokeWidth={1} className="md:hidden bg-amber-50 text-blue-950 hover:text-amber-400 transition-colors" />
+                    <HiOutlineShoppingCart size={40} strokeWidth={1} className="hidden md:block bg-amber-50 text-blue-950 hover:text-amber-400 transition-colors" />
                   </Link>
                   <button className="md:hidden">
-                    <FaBars size={25} />
+                    <FaBars size={20} />
                   </button>
                 </div>
 
-                <div className="flex flex-row items-center gap-3">
+                <div className="hidden md:flex flex-row items-center gap-3">
                   <FaWhatsapp size={40} className="text-amber-50 hover:text-amber-400 transition-colors" />
                   <div className="flex flex-col text-[10px] leading-tight">
                     <p className="font-bold text-slate-400">TELÉFONOS:</p>
